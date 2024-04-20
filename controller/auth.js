@@ -59,7 +59,6 @@ async function Signin(req, res) {
       throw new Error("User not Found");
     }
     const checkPassword = await bcrypt.compare(password, user.password);
-    console.log(checkPassword);
     if (checkPassword) {
       const tokenData = {
         _id: user._id,
@@ -89,4 +88,22 @@ async function Signin(req, res) {
     });
   }
 }
-module.exports = { Signup, Signin };
+
+async function Signout(req, res) {
+  try {
+    res.clearCookie("token");
+    res.json({
+      data: [],
+      message: "Logout Successfully",
+      error: false,
+      success: true,
+    });
+  } catch (err) {
+    res.status(400).json({
+      message: err.message || err,
+      error: true,
+      success: false,
+    });
+  }
+}
+module.exports = { Signup, Signin, Signout };
